@@ -1,5 +1,8 @@
 #include "htk.h"
+#include <__clang_cuda_runtime_wrapper.h>
+#include <cmath>
 #include <cuda_runtime_api.h>
+#include <driver_types.h>
 
 #if defined(USE_DOUBLE)
 #define EPSILON 0.00005
@@ -13,11 +16,16 @@ typedef float real_t;
 #endif
 
 #define val(arry, i, j) arry[(i) * width + (j)]
-
+#define BLOCK_SIZE 16
 int iterations;
 
-static void hot_plate(real_t *out, real_t *in, int width, int height,
-                      real_t epsilon) {
+__global__ static void hot_plate_kernel(real_t *out, real_t *in, int width, int height,
+                                        real_t epsilon)
+{
+}
+
+static void hot_plate(real_t *out, real_t *in, int width, int height, real_t epsilon)
+{
   real_t *u = in;
   real_t *w = out;
   int run = 1;
@@ -27,16 +35,18 @@ static void hot_plate(real_t *out, real_t *in, int width, int height,
   // Iterate until the new (W) and old (U) solution differ by no more than
   // epsilon.
   iterations = 0;
-  while (run) {
+  while (run)
+  {
     // Determine the new estimate of the solution at the interior points.
     // The new solution W is the average of north, south, east and west
     // neighbors.
     run = 0;
-    for (int i = 1; i < height - 1; ++i) {
-      for (int j = 1; j < width - 1; ++j) {
-        val(w, i, j) = (val(u, i - 1, j) + val(u, i + 1, j) + val(u, i, j - 1) +
-                        val(u, i, j + 1)) /
-                       (real_t)4;
+    for (int i = 1; i < height - 1; ++i)
+    {
+      for (int j = 1; j < width - 1; ++j)
+      {
+        val(w, i, j) =
+            (val(u, i - 1, j) + val(u, i + 1, j) + val(u, i, j - 1) + val(u, i, j + 1)) / (real_t)4;
         if (epsilon < FABS(val(w, i, j) - val(u, i, j)))
           run |= 1;
       }
@@ -49,12 +59,14 @@ static void hot_plate(real_t *out, real_t *in, int width, int height,
     iterations++;
   }
   // Save solution to output.
-  if (u != out) {
+  if (u != out)
+  {
     memcpy(out, u, sizeof(real_t) * width * height);
   }
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
   htkArg_t args;
   int width;
   int height;
@@ -64,9 +76,12 @@ int main(int argc, char *argv[]) {
   htkImage_t output;
   float *hostInputData;
   float *hostOutputData;
+  float *deviceInputData;
+  float *deviceOutputData;
 
   args = htkArg_read(argc, argv);
-  if (args.inputCount != 1) {
+  if (args.inputCount != 1)
+  {
     htkLog(ERROR, "Missing input");
     return 1;
   }
@@ -77,15 +92,31 @@ int main(int argc, char *argv[]) {
   width = htkImage_getWidth(input);
   height = htkImage_getHeight(input);
   channels = htkImage_getChannels(input);
-  if (channels != 1) {
+  if (channels != 1)
+  {
     htkLog(ERROR, "Expecting gray scale image");
     return 1;
   }
+  int size = sizeof(float) * width * height;
+
+  // CUDA MALLOC
+  cudaMalloc((void **)&deviceInputData, size);
+  cudaMalloc((void **)&deviceOutputData, size);
+
   output = htkImage_new(width, height, channels);
   hostInputData = htkImage_getData(input);
   hostOutputData = htkImage_getData(output);
   htkTime_stop(IO, "Importing data and creating memory on host");
   htkLog(TRACE, "Image dimensions WxH are ", width, " x ", height);
+
+  // CUDA COPY
+  cudaMemcpy(deviceInputData, hostInputData, size, cudaMemcpyHostToDevice);
+  cudaMemcpy(deviceOutputData, hostOutputData, size, cudaMemcpyHostToDevice);
+
+  dim3 DimGrid(ceil(width / (float)BLOCK_SIZE), ceil(height / (float)BLOCK_SIZE), 1);
+  dim3 DimBlock(BLOCK_SIZE, BLOCK_SIZE, 1);
+  hot_plate_kernel<<<DimGrid, DimBlock>>>(deviceOutputData, deviceInputData, width, height,
+                                          EPSILON);
 
   htkTime_start(Compute, "Doing the computation");
   hot_plate(hostOutputData, hostInputData, width, height, EPSILON);
