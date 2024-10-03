@@ -1,0 +1,80 @@
+[IO] Elapsed time: 2.603 ms
+The input length is 16
+[GPU] Elapsed time: 399.391 ms
+[Copy] Elapsed time: 0.026 ms
+[Compute] Elapsed time: 0.052 ms
+[Copy] Elapsed time: 0.017 ms
+[GPU] Elapsed time: 0.047 ms
+Solution is correct
+[IO] Elapsed time: 3.193 ms
+The input length is 64
+[GPU] Elapsed time: 144.292 ms
+[Copy] Elapsed time: 0.025 ms
+[Compute] Elapsed time: 0.049 ms
+[Copy] Elapsed time: 0.016 ms
+[GPU] Elapsed time: 0.043 ms
+Solution is correct
+[IO] Elapsed time: 3.321 ms
+The input length is 93
+[GPU] Elapsed time: 146.621 ms
+[Copy] Elapsed time: 0.025 ms
+[Compute] Elapsed time: 0.057 ms
+[Copy] Elapsed time: 0.012 ms
+[GPU] Elapsed time: 0.045 ms
+Solution is correct
+[IO] Elapsed time: 2.681 ms
+The input length is 112
+[GPU] Elapsed time: 141.919 ms
+[Copy] Elapsed time: 0.026 ms
+[Compute] Elapsed time: 0.053 ms
+[Copy] Elapsed time: 0.012 ms
+[GPU] Elapsed time: 0.047 ms
+Solution is correct
+[IO] Elapsed time: 6.433 ms
+The input length is 1120
+[GPU] Elapsed time: 140.742 ms
+[Copy] Elapsed time: 0.028 ms
+[Compute] Elapsed time: 0.047 ms
+[Copy] Elapsed time: 0.012 ms
+[GPU] Elapsed time: 0.044 ms
+Solution is correct
+[IO] Elapsed time: 7.249 ms
+The input length is 1233
+[GPU] Elapsed time: 139.558 ms
+[Copy] Elapsed time: 0.027 ms
+[Compute] Elapsed time: 0.053 ms
+[Copy] Elapsed time: 0.013 ms
+[GPU] Elapsed time: 0.044 ms
+Solution is correct
+[IO] Elapsed time: 6.434 ms
+The input length is 1033
+[GPU] Elapsed time: 136.431 ms
+[Copy] Elapsed time: 0.102 ms
+[Compute] Elapsed time: 0.713 ms
+[Copy] Elapsed time: 0.013 ms
+[GPU] Elapsed time: 0.048 ms
+Solution is correct
+[IO] Elapsed time: 18.299 ms
+The input length is 4098
+[GPU] Elapsed time: 134.807 ms
+[Copy] Elapsed time: 0.029 ms
+[Compute] Elapsed time: 0.052 ms
+[Copy] Elapsed time: 0.015 ms
+[GPU] Elapsed time: 0.045 ms
+Solution is correct
+[IO] Elapsed time: 17.550 ms
+The input length is 4018
+[GPU] Elapsed time: 139.412 ms
+[Copy] Elapsed time: 0.033 ms
+[Compute] Elapsed time: 0.057 ms
+[Copy] Elapsed time: 0.014 ms
+[GPU] Elapsed time: 0.049 ms
+Solution is correct
+[IO] Elapsed time: 39.311 ms
+The input length is 9921
+[GPU] Elapsed time: 137.838 ms
+[Copy] Elapsed time: 0.043 ms
+[Compute] Elapsed time: 0.065 ms
+[Copy] Elapsed time: 0.019 ms
+[GPU] Elapsed time: 0.050 ms
+Solution is correct

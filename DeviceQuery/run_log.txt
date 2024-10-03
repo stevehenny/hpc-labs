@@ -1,0 +1,10 @@
+There is 1 device supporting CUDA
+Device 0 name: NVIDIA GeForce RTX 3070
+ Computational Capabilities: 8.6
+ Maximum global memory size: 8250458112
+ Maximum constant memory size: 65536
+ Maximum shared memory size per block: 49152
+ Maximum block dimensions: 1024 x 1024 x 64
+ Maximum grid dimensions: 2147483647 x 65535 x 65535
+ Warp size: 32
+[GPU] Elapsed time: 5.290 ms

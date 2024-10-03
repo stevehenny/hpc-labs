@@ -1,0 +1,100 @@
+[IO] Elapsed time: 1.114 ms
+The dimensions of A are 16 x 16
+The dimensions of B are 16 x 16
+The dimensions of C are 16 x 16
+[GPU] Elapsed time: 222.031 ms
+[Copy] Elapsed time: 0.031 ms
+[Compute] Elapsed time: 0.050 ms
+[Copy] Elapsed time: 0.011 ms
+[GPU] Elapsed time: 0.039 ms
+Solution is correct
+[IO] Elapsed time: 1.523 ms
+The dimensions of A are 64 x 64
+The dimensions of B are 64 x 64
+The dimensions of C are 64 x 64
+[GPU] Elapsed time: 125.978 ms
+[Copy] Elapsed time: 0.038 ms
+[Compute] Elapsed time: 0.055 ms
+[Copy] Elapsed time: 0.013 ms
+[GPU] Elapsed time: 0.039 ms
+Solution is correct
+[IO] Elapsed time: 1.885 ms
+The dimensions of A are 64 x 128
+The dimensions of B are 128 x 64
+The dimensions of C are 64 x 64
+[GPU] Elapsed time: 123.679 ms
+[Copy] Elapsed time: 0.045 ms
+[Compute] Elapsed time: 0.056 ms
+[Copy] Elapsed time: 0.014 ms
+[GPU] Elapsed time: 0.066 ms
+Solution is correct
+[IO] Elapsed time: 0.986 ms
+The dimensions of A are 112 x 48
+The dimensions of B are 48 x 16
+The dimensions of C are 112 x 16
+[GPU] Elapsed time: 120.323 ms
+[Copy] Elapsed time: 0.037 ms
+[Compute] Elapsed time: 0.052 ms
+[Copy] Elapsed time: 0.012 ms
+[GPU] Elapsed time: 0.038 ms
+Solution is correct
+[IO] Elapsed time: 1.672 ms
+The dimensions of A are 84 x 84
+The dimensions of B are 84 x 84
+The dimensions of C are 84 x 84
+[GPU] Elapsed time: 126.364 ms
+[Copy] Elapsed time: 0.045 ms
+[Compute] Elapsed time: 0.057 ms
+[Copy] Elapsed time: 0.015 ms
+[GPU] Elapsed time: 0.042 ms
+Solution is correct
+[IO] Elapsed time: 2.212 ms
+The dimensions of A are 80 x 99
+The dimensions of B are 99 x 128
+The dimensions of C are 80 x 128
+[GPU] Elapsed time: 120.632 ms
+[Copy] Elapsed time: 0.050 ms
+[Compute] Elapsed time: 0.052 ms
+[Copy] Elapsed time: 0.017 ms
+[GPU] Elapsed time: 0.039 ms
+Solution is correct
+[IO] Elapsed time: 1.589 ms
+The dimensions of A are 67 x 53
+The dimensions of B are 53 x 64
+The dimensions of C are 67 x 64
+[GPU] Elapsed time: 124.038 ms
+[Copy] Elapsed time: 0.038 ms
+[Compute] Elapsed time: 0.068 ms
+[Copy] Elapsed time: 0.017 ms
+[GPU] Elapsed time: 0.039 ms
+Solution is correct
+[IO] Elapsed time: 1.957 ms
+The dimensions of A are 29 x 117
+The dimensions of B are 117 x 85
+The dimensions of C are 29 x 85
+[GPU] Elapsed time: 120.509 ms
+[Copy] Elapsed time: 0.042 ms
+[Compute] Elapsed time: 0.059 ms
+[Copy] Elapsed time: 0.012 ms
+[GPU] Elapsed time: 0.044 ms
+Solution is correct
+[IO] Elapsed time: 1.275 ms
+The dimensions of A are 191 x 19
+The dimensions of B are 19 x 241
+The dimensions of C are 191 x 241
+[GPU] Elapsed time: 120.120 ms
+[Copy] Elapsed time: 0.063 ms
+[Compute] Elapsed time: 0.056 ms
+[Copy] Elapsed time: 0.089 ms
+[GPU] Elapsed time: 0.047 ms
+Solution is correct
+[IO] Elapsed time: 182.697 ms
+The dimensions of A are 999 x 999
+The dimensions of B are 999 x 999
+The dimensions of C are 999 x 999
+[GPU] Elapsed time: 121.081 ms
+[Copy] Elapsed time: 1.293 ms
+[Compute] Elapsed time: 1.597 ms
+[Copy] Elapsed time: 0.456 ms
+[GPU] Elapsed time: 0.282 ms
+Solution is correct
