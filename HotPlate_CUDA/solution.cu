@@ -1,8 +1,5 @@
 #include "htk.h"
-#include <__clang_cuda_runtime_wrapper.h>
-#include <cmath>
-#include <cuda_runtime_api.h>
-#include <driver_types.h>
+
 
 #if defined(USE_DOUBLE)
 #define EPSILON 0.00005
@@ -17,53 +14,30 @@ typedef float real_t;
 
 #define val(arry, i, j) arry[(i) * width + (j)]
 #define BLOCK_SIZE 16
-int iterations;
+// int iterations;
+__device__ int d_run;
 
 __global__ static void hot_plate_kernel(real_t *out, real_t *in, int width, int height,
                                         real_t epsilon)
 {
+
+  int Col = blockIdx.x * blockDim.x + threadIdx.x;
+  int Row = blockIdx.y * blockDim.y + threadIdx.y;
+  int r_run = 0;
+  if ((Row < height - 1) && (Col < width - 1) && (Row > 0) && (Col > 0)){
+    out[Row * width + Col] =
+    (in[(Row-1) * width + Col] + in[(Row+1)*width + Col] + in[(Row * width) + Col + 1] + in[(Row * width) + Col - 1]) / (real_t)4;
+  if (epsilon < FABS(out[Row * width + Col] - in[Row * width + Col])){
+    r_run |= 1;
+    
+    
+}
+}
+r_run = __syncthreads_or(r_run);
+if(threadIdx.x == 0 && threadIdx.y == 0)
+atomicOr(&d_run, r_run);
 }
 
-static void hot_plate(real_t *out, real_t *in, int width, int height, real_t epsilon)
-{
-  real_t *u = in;
-  real_t *w = out;
-  int run = 1;
-
-  // Initialize output from input (need border pixels)
-  memcpy(out, in, sizeof(real_t) * width * height);
-  // Iterate until the new (W) and old (U) solution differ by no more than
-  // epsilon.
-  iterations = 0;
-  while (run)
-  {
-    // Determine the new estimate of the solution at the interior points.
-    // The new solution W is the average of north, south, east and west
-    // neighbors.
-    run = 0;
-    for (int i = 1; i < height - 1; ++i)
-    {
-      for (int j = 1; j < width - 1; ++j)
-      {
-        val(w, i, j) =
-            (val(u, i - 1, j) + val(u, i + 1, j) + val(u, i, j - 1) + val(u, i, j + 1)) / (real_t)4;
-        if (epsilon < FABS(val(w, i, j) - val(u, i, j)))
-          run |= 1;
-      }
-    }
-    {
-      real_t *t = w;
-      w = u;
-      u = t;
-    } // swap u and w
-    iterations++;
-  }
-  // Save solution to output.
-  if (u != out)
-  {
-    memcpy(out, u, sizeof(real_t) * width * height);
-  }
-}
 
 int main(int argc, char *argv[])
 {
@@ -78,6 +52,7 @@ int main(int argc, char *argv[])
   float *hostOutputData;
   float *deviceInputData;
   float *deviceOutputData;
+  int h_run = 1;
 
   args = htkArg_read(argc, argv);
   if (args.inputCount != 1)
@@ -103,6 +78,7 @@ int main(int argc, char *argv[])
   cudaMalloc((void **)&deviceInputData, size);
   cudaMalloc((void **)&deviceOutputData, size);
 
+
   output = htkImage_new(width, height, channels);
   hostInputData = htkImage_getData(input);
   hostOutputData = htkImage_getData(output);
@@ -111,19 +87,43 @@ int main(int argc, char *argv[])
 
   // CUDA COPY
   cudaMemcpy(deviceInputData, hostInputData, size, cudaMemcpyHostToDevice);
-  cudaMemcpy(deviceOutputData, hostOutputData, size, cudaMemcpyHostToDevice);
+  cudaMemcpy(deviceOutputData, hostInputData, size, cudaMemcpyHostToDevice);
+
 
   dim3 DimGrid(ceil(width / (float)BLOCK_SIZE), ceil(height / (float)BLOCK_SIZE), 1);
   dim3 DimBlock(BLOCK_SIZE, BLOCK_SIZE, 1);
-  hot_plate_kernel<<<DimGrid, DimBlock>>>(deviceOutputData, deviceInputData, width, height,
-                                          EPSILON);
+
+  
+  real_t *u = deviceInputData;
+  real_t *w = deviceOutputData;
+  int iterations = 0;
 
   htkTime_start(Compute, "Doing the computation");
-  hot_plate(hostOutputData, hostInputData, width, height, EPSILON);
+  while(h_run){
+    h_run = 0;
+    
+    cudaMemcpyToSymbol(d_run, &h_run, sizeof(int));
+    hot_plate_kernel<<<DimGrid, DimBlock>>>(w, u, width, height,
+      EPSILON);
+      cudaDeviceSynchronize();
+      cudaMemcpyFromSymbol(&h_run, d_run, sizeof(int));
+      {
+        real_t* t = w;
+        w = u;
+        u = t;
+      }
+      iterations++;
+  }
   htkTime_stop(Compute, "Doing the computation");
   htkLog(TRACE, "Solution iterations: ", iterations);
-
+  if (u != deviceOutputData){
+    cudaMemcpy(deviceOutputData, u, size, cudaMemcpyDeviceToDevice);
+  }
+  cudaMemcpy(hostOutputData, deviceOutputData, size, cudaMemcpyDeviceToHost);
   htkSolution(args, output);
+
+  cudaFree(deviceInputData);
+  cudaFree(deviceOutputData);
 
   htkImage_delete(output);
   htkImage_delete(input);
