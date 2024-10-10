@@ -16,13 +16,34 @@ typedef float real_t;
 #define val(arry, i, j) arry[(i) * width + (j)]
 
 int iterations;
+static void hot_plate_thread(real_t *u, real_t *w, int start_row, int finish_row, int width,
+                             real_t epsilon, int *run)
+{
+  for (int i = start_row; i < finish_row; ++i)
+  {
+    for (int j = 1; j < width - 1; ++j)
+    {
+      val(w, i, j) =
+          (val(u, i - 1, j) + val(u, i + 1, j) + val(u, i, j - 1) + val(u, i, j + 1)) / (real_t)4;
+      if (epsilon < FABS(val(w, i, j) - val(u, i, j)))
+        (*run) |= 1;
+    }
+  }
+}
 
-
-static void hot_plate(real_t *out, real_t *in, int width, int height, real_t epsilon)
+static void hot_plate(real_t *out, real_t *in, int width, int height, real_t epsilon,
+                      int num_threads)
 {
   real_t *u = in;
   real_t *w = out;
   int run = 1;
+  int numArray[num_threads];
+  std::thread threads[num_threads];
+  for (int i = 0; i < num_threads; i++)
+    numArray[i] = 0;
+
+  // compute rows per thread
+  int rows_per_thread = height / num_threads;
 
   // Initialize output from input (need border pixels)
   memcpy(out, in, sizeof(real_t) * width * height);
@@ -33,16 +54,25 @@ static void hot_plate(real_t *out, real_t *in, int width, int height, real_t eps
     // Determine the new estimate of the solution at the interior points.
     // The new solution W is the average of north, south, east and west neighbors.
     run = 0;
-    for (int i = 1; i < height - 1; ++i)
+    int start;
+    int finish;
+    for (int i = 0; i < num_threads; i++)
     {
-      for (int j = 1; j < width - 1; ++j)
-      {
-        val(w, i, j) =
-            (val(u, i - 1, j) + val(u, i + 1, j) + val(u, i, j - 1) + val(u, i, j + 1)) / (real_t)4;
-        if (epsilon < FABS(val(w, i, j) - val(u, i, j)))
-          run |= 1;
-      }
+      start = (i == 0) ? 1 : i * rows_per_thread;
+      finish = start + rows_per_thread < height ? start + rows_per_thread : height;
+      threads[i] =
+          std::thread(hot_plate_thread, out, in, start, finish, width, epsilon, &numArray[i]);
     }
+    for (auto &th : threads)
+    {
+      th.join();
+    }
+
+    for (int i = 0; i < num_threads; i++)
+    {
+      run |= numArray[i];
+    }
+
     {
       real_t *t = w;
       w = u;
@@ -61,12 +91,12 @@ int main(int argc, char *argv[])
 {
 
   int num_threads;
-{
-  if (const char* str_p = std::getenv("NUM_THREADS"))
-    num_threads = atoi(str_p);
-  else
-    num_threads = std::thread::hardware_concurrency();
-}  
+  {
+    if (const char *str_p = std::getenv("NUM_THREADS"))
+      num_threads = atoi(str_p);
+    else
+      num_threads = std::thread::hardware_concurrency();
+  }
   htkArg_t args;
   int width;
   int height;
@@ -95,6 +125,7 @@ int main(int argc, char *argv[])
     htkLog(ERROR, "Expecting gray scale image");
     return 1;
   }
+
   output = htkImage_new(width, height, channels);
   hostInputData = htkImage_getData(input);
   hostOutputData = htkImage_getData(output);
@@ -102,7 +133,7 @@ int main(int argc, char *argv[])
   htkLog(TRACE, "Image dimensions WxH are ", width, " x ", height);
 
   htkTime_start(Compute, "Doing the computation");
-  hot_plate(hostOutputData, hostInputData, width, height, EPSILON);
+  hot_plate(hostOutputData, hostInputData, width, height, EPSILON, num_threads);
   htkTime_stop(Compute, "Doing the computation");
   htkLog(TRACE, "Solution iterations: ", iterations);
 
