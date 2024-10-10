@@ -3,7 +3,7 @@
 # Sources and targets
 # use TARGET for host only programs (no GPU)
 # use NVTARGET for GPU programs
-# TARGET = solution
+# TARGET = template
 NVTARGET = solution
 MODULES = $(if $(wildcard solution.*),solution,template)
 OBJECTS = $(addsuffix .o,$(MODULES))

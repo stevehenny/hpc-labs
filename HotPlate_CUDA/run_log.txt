@@ -1,20 +1,6 @@
-[IO] Elapsed time: 70.233 ms
-Image dimensions WxH are 50 x 32
-[Compute] Elapsed time: 8.790 ms
-Solution iterations: 940
-Solution is correct
-[IO] Elapsed time: 53.505 ms
-Image dimensions WxH are 768 x 768
-[Compute] Elapsed time: 51.023 ms
-Solution iterations: 3963
-Solution is correct
-[IO] Elapsed time: 48.982 ms
-Image dimensions WxH are 1000 x 750
-[Compute] Elapsed time: 57.110 ms
-Solution iterations: 3963
-Solution is correct
-[IO] Elapsed time: 50.678 ms
+==PROF== Waiting for profiler to attach on ports 49152-49215.
+[IO] Elapsed time: 80112.512 ms
 Image dimensions WxH are 2048 x 1024
-[Compute] Elapsed time: 93.590 ms
+[Compute] Elapsed time: 1269796.564 ms
 Solution iterations: 3963
 Solution is correct
