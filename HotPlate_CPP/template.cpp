@@ -11,11 +11,12 @@ typedef double real_t;
 typedef float real_t;
 #endif
 
-#define val(arry, i, j) arry[(i)*width + (j)]
+#define val(arry, i, j) arry[(i) * width + (j)]
 
 int iterations;
 
-static void hot_plate(real_t *out, real_t *in, int width, int height, real_t epsilon) {
+static void hot_plate(real_t *out, real_t *in, int width, int height, real_t epsilon)
+{
   real_t *u = in;
   real_t *w = out;
   int run = 1;
@@ -24,27 +25,37 @@ static void hot_plate(real_t *out, real_t *in, int width, int height, real_t eps
   memcpy(out, in, sizeof(real_t) * width * height);
   // Iterate until the new (W) and old (U) solution differ by no more than epsilon.
   iterations = 0;
-  while (run) {
+  while (run)
+  {
     // Determine the new estimate of the solution at the interior points.
     // The new solution W is the average of north, south, east and west neighbors.
     run = 0;
-    for (int i = 1; i < height - 1; ++i) {
-      for (int j = 1; j < width - 1; ++j) {
-        val(w,i,j) = ( val(u,i-1,j) + val(u,i+1,j) + val(u,i,j-1) + val(u,i,j+1) ) / (real_t)4;
-        if (epsilon < FABS(val(w,i,j) - val(u,i,j))) run |= 1;
+    for (int i = 1; i < height - 1; ++i)
+    {
+      for (int j = 1; j < width - 1; ++j)
+      {
+        val(w, i, j) =
+            (val(u, i - 1, j) + val(u, i + 1, j) + val(u, i, j - 1) + val(u, i, j + 1)) / (real_t)4;
+        if (epsilon < FABS(val(w, i, j) - val(u, i, j)))
+          run |= 1;
       }
     }
-    {real_t *t = w; w = u; u = t;} // swap u and w
+    {
+      real_t *t = w;
+      w = u;
+      u = t;
+    } // swap u and w
     iterations++;
   }
   // Save solution to output.
-  if (u != out) {
+  if (u != out)
+  {
     memcpy(out, u, sizeof(real_t) * width * height);
   }
 }
 
-
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
   htkArg_t args;
   int width;
   int height;
@@ -56,17 +67,25 @@ int main(int argc, char *argv[]) {
   float *hostOutputData;
 
   args = htkArg_read(argc, argv);
-  if (args.inputCount != 1) {htkLog(ERROR, "Missing input"); return 1;}
+  if (args.inputCount != 1)
+  {
+    htkLog(ERROR, "Missing input");
+    return 1;
+  }
 
   htkTime_start(IO, "Importing data and creating memory on host");
   inputFile = htkArg_getInputFile(args, 0);
   input = htkImport(inputFile);
-  width  = htkImage_getWidth(input);
+  width = htkImage_getWidth(input);
   height = htkImage_getHeight(input);
-  channels  = htkImage_getChannels(input);
-  if (channels != 1) {htkLog(ERROR, "Expecting gray scale image"); return 1;}
+  channels = htkImage_getChannels(input);
+  if (channels != 1)
+  {
+    htkLog(ERROR, "Expecting gray scale image");
+    return 1;
+  }
   output = htkImage_new(width, height, channels);
-  hostInputData  = htkImage_getData(input);
+  hostInputData = htkImage_getData(input);
   hostOutputData = htkImage_getData(output);
   htkTime_stop(IO, "Importing data and creating memory on host");
   htkLog(TRACE, "Image dimensions WxH are ", width, " x ", height);
