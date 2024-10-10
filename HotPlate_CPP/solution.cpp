@@ -1,6 +1,6 @@
 #include "htk.h"
 #include <cstdlib>
-#include <pthread.h>
+#include <thread>
 
 #if defined(USE_DOUBLE)
 #define EPSILON 0.00005
@@ -16,6 +16,7 @@ typedef float real_t;
 #define val(arry, i, j) arry[(i) * width + (j)]
 
 int iterations;
+
 
 static void hot_plate(real_t *out, real_t *in, int width, int height, real_t epsilon)
 {
@@ -58,6 +59,14 @@ static void hot_plate(real_t *out, real_t *in, int width, int height, real_t eps
 
 int main(int argc, char *argv[])
 {
+
+  int num_threads;
+{
+  if (const char* str_p = std::getenv("NUM_THREADS"))
+    num_threads = atoi(str_p);
+  else
+    num_threads = std::thread::hardware_concurrency();
+}  
   htkArg_t args;
   int width;
   int height;
@@ -67,13 +76,6 @@ int main(int argc, char *argv[])
   htkImage_t output;
   float *hostInputData;
   float *hostOutputData;
-
-  int num_threads;
-
-  if (const char *str_p = std::getenv("NUM_THREADS"))
-    num_threads = atoi(str_p);
-  else
-    num_threads = std::thread::hardware_concurrency();
 
   args = htkArg_read(argc, argv);
   if (args.inputCount != 1)
