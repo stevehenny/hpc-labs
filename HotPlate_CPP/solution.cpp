@@ -1,6 +1,12 @@
 #include "htk.h"
 #include <cstdlib>
 #include <thread>
+#include <mutex>
+#include <condition_variable>
+
+std::mutex mtx;
+std::condition_variable cv;
+bool ready = false;
 
 #if defined(USE_DOUBLE)
 #define EPSILON 0.00005
@@ -16,19 +22,23 @@ typedef float real_t;
 #define val(arry, i, j) arry[(i) * width + (j)]
 
 int iterations;
-static void hot_plate_thread(real_t *u, real_t *w, int start_row, int finish_row, int width,
+static void hot_plate_thread(real_t *w, real_t *u, int start_row, int finish_row, int height, int width,
                              real_t epsilon, int *run)
 {
-  for (int i = start_row; i < finish_row; ++i)
+  int temp_run = 0;
+  for (int i = start_row; i < finish_row; ++i)  // Fix: include finish_row
   {
+    if (i == 0) continue;
+    if(i == height - 1) break;
     for (int j = 1; j < width - 1; ++j)
     {
       val(w, i, j) =
           (val(u, i - 1, j) + val(u, i + 1, j) + val(u, i, j - 1) + val(u, i, j + 1)) / (real_t)4;
       if (epsilon < FABS(val(w, i, j) - val(u, i, j)))
-        (*run) |= 1;
+        temp_run |= 1;
     }
   }
+  (*run) = temp_run;
 }
 
 static void hot_plate(real_t *out, real_t *in, int width, int height, real_t epsilon,
@@ -39,30 +49,35 @@ static void hot_plate(real_t *out, real_t *in, int width, int height, real_t eps
   int run = 1;
   int numArray[num_threads];
   std::thread threads[num_threads];
+
+  // Initialize run flags for each thread
   for (int i = 0; i < num_threads; i++)
     numArray[i] = 0;
 
-  // compute rows per thread
-  int rows_per_thread = height / num_threads;
+  // Compute rows per thread
+  int rows_per_thread = (height - 1) / num_threads + 1;  // Exclude boundary rows
 
   // Initialize output from input (need border pixels)
   memcpy(out, in, sizeof(real_t) * width * height);
-  // Iterate until the new (W) and old (U) solution differ by no more than epsilon.
   iterations = 0;
+
+  // Iterate until the new solution differs by no more than epsilon
   while (run)
   {
-    // Determine the new estimate of the solution at the interior points.
-    // The new solution W is the average of north, south, east and west neighbors.
     run = 0;
-    int start;
-    int finish;
+    int start, finish;
     for (int i = 0; i < num_threads; i++)
     {
-      start = (i == 0) ? 1 : i * rows_per_thread;
-      finish = start + rows_per_thread < height ? start + rows_per_thread : height;
-      threads[i] =
-          std::thread(hot_plate_thread, out, in, start, finish, width, epsilon, &numArray[i]);
+      // Fix: Calculate start and finish, handle boundaries correctly
+      start = i * rows_per_thread;
+      finish = start + rows_per_thread;
+    //   std::cout << "Start: " << start << std::endl;
+    //   std::cout << "Finish: " << finish << std::endl;
+
+
+      threads[i] = std::thread(hot_plate_thread, w, u, start, finish, height,  width, epsilon, &numArray[i]);
     }
+
     for (auto &th : threads)
     {
       th.join();
@@ -73,14 +88,12 @@ static void hot_plate(real_t *out, real_t *in, int width, int height, real_t eps
       run |= numArray[i];
     }
 
-    {
-      real_t *t = w;
-      w = u;
-      u = t;
-    } // swap u and w
+    // Swap pointers
+    std::swap(w, u);
     iterations++;
   }
-  // Save solution to output.
+
+  // Copy result to output
   if (u != out)
   {
     memcpy(out, u, sizeof(real_t) * width * height);
@@ -141,6 +154,7 @@ int main(int argc, char *argv[])
 
   htkImage_delete(output);
   htkImage_delete(input);
+  std::cout << std::endl;
 
   return 0;
 }
