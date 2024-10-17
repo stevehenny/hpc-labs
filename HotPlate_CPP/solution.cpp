@@ -22,6 +22,19 @@ typedef float real_t;
 #define val(arry, i, j) arry[(i) * width + (j)]
 
 int iterations;
+
+// Function to log messages to run_log.txt
+void logToFile(const char *message) {
+    FILE *file = fopen("run_log.txt", "a"); // Open run_log.txt in append mode
+    if (file == NULL) {
+        perror("Failed to open run_log.txt");
+        exit(EXIT_FAILURE);
+    }
+    fprintf(file, "%s\n", message);
+    fclose(file);
+}
+
+
 static void hot_plate_thread(real_t *w, real_t *u, int start_row, int finish_row, int height, int width,
                              real_t epsilon, int *run)
 {
@@ -148,12 +161,18 @@ int main(int argc, char *argv[])
   htkTime_start(Compute, "Doing the computation");
   hot_plate(hostOutputData, hostInputData, width, height, EPSILON, num_threads);
   htkTime_stop(Compute, "Doing the computation");
+
   htkLog(TRACE, "Solution iterations: ", iterations);
 
   htkSolution(args, output);
 
   htkImage_delete(output);
   htkImage_delete(input);
+
+  // Write computation details to run_log.txt
+  logToFile("Computation started");
+  logToFile("Image dimensions: WxH are 1024 x 768");
+  logToFile("Computation finished");
   std::cout << std::endl;
 
   return 0;
