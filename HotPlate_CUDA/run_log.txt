@@ -1,6 +1,20 @@
-==PROF== Waiting for profiler to attach on ports 49152-49215.
-[IO] Elapsed time: 80112.512 ms
+[IO] Elapsed time: 240.510 ms
+Image dimensions WxH are 50 x 32
+[Compute] Elapsed time: 9.249 ms
+Solution iterations: 940
+Solution is correct
+[IO] Elapsed time: 163.588 ms
+Image dimensions WxH are 768 x 768
+[Compute] Elapsed time: 82.430 ms
+Solution iterations: 3963
+Solution is correct
+[IO] Elapsed time: 181.272 ms
+Image dimensions WxH are 1000 x 750
+[Compute] Elapsed time: 98.651 ms
+Solution iterations: 3963
+Solution is correct
+[IO] Elapsed time: 211.504 ms
 Image dimensions WxH are 2048 x 1024
-[Compute] Elapsed time: 1269796.564 ms
+[Compute] Elapsed time: 203.760 ms
 Solution iterations: 3963
 Solution is correct

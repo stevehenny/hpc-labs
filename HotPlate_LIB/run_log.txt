@@ -1,20 +1,20 @@
-[IO] Elapsed time: 2.564 ms
+[IO] Elapsed time: 0.505 ms
 Image dimensions WxH are 50 x 32
-[Compute] Elapsed time: 37.195 ms
+[Compute] Elapsed time: 34.727 ms
 Solution iterations: 940
 Solution is correct
-[IO] Elapsed time: 3.710 ms
+[IO] Elapsed time: 2.112 ms
 Image dimensions WxH are 768 x 768
-[Compute] Elapsed time: 188.121 ms
+[Compute] Elapsed time: 203.128 ms
 Solution iterations: 3958
 Solution is correct
-[IO] Elapsed time: 3.395 ms
+[IO] Elapsed time: 1.552 ms
 Image dimensions WxH are 1000 x 750
-[Compute] Elapsed time: 261.663 ms
+[Compute] Elapsed time: 254.896 ms
 Solution iterations: 3958
 Solution is correct
-[IO] Elapsed time: 6.980 ms
+[IO] Elapsed time: 4.323 ms
 Image dimensions WxH are 2048 x 1024
-[Compute] Elapsed time: 488.376 ms
+[Compute] Elapsed time: 481.797 ms
 Solution iterations: 3958
 Solution is correct

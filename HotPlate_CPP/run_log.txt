@@ -1,27 +1,27 @@
 Computation started
 Image dimensions: WxH are 1024 x 768
 Computation finished
-[IO] Elapsed time: 1.454 ms
+[IO] Elapsed time: 44.718 ms
 Image dimensions WxH are 768 x 768
-[Compute] Elapsed time: 1130.221 ms
+[Compute] Elapsed time: 1069.211 ms
 Solution iterations: 3963
 Solution is correct
 
 Computation started
 Image dimensions: WxH are 1024 x 768
 Computation finished
-[IO] Elapsed time: 2.660 ms
+[IO] Elapsed time: 38.359 ms
 Image dimensions WxH are 1000 x 750
-[Compute] Elapsed time: 1143.120 ms
+[Compute] Elapsed time: 1079.265 ms
 Solution iterations: 3963
 Solution is correct
 
 Computation started
 Image dimensions: WxH are 1024 x 768
 Computation finished
-[IO] Elapsed time: 8.912 ms
+[IO] Elapsed time: 73.575 ms
 Image dimensions WxH are 2048 x 1024
-[Compute] Elapsed time: 1362.707 ms
+[Compute] Elapsed time: 1255.532 ms
 Solution iterations: 3963
 Solution is correct
 
@@ -29,9 +29,9 @@ Max threads: 1
 Computation started
 Image dimensions: WxH are 1024 x 768
 Computation finished
-[IO] Elapsed time: 9.674 ms
+[IO] Elapsed time: 9.956 ms
 Image dimensions WxH are 2048 x 1024
-[Compute] Elapsed time: 7089.837 ms
+[Compute] Elapsed time: 5300.518 ms
 Solution iterations: 3963
 Solution is correct
 
@@ -39,9 +39,9 @@ Max threads: 2
 Computation started
 Image dimensions: WxH are 1024 x 768
 Computation finished
-[IO] Elapsed time: 13.888 ms
+[IO] Elapsed time: 5.666 ms
 Image dimensions WxH are 2048 x 1024
-[Compute] Elapsed time: 3025.496 ms
+[Compute] Elapsed time: 2987.180 ms
 Solution iterations: 3963
 Solution is correct
 
@@ -49,9 +49,9 @@ Max threads: 4
 Computation started
 Image dimensions: WxH are 1024 x 768
 Computation finished
-[IO] Elapsed time: 4.426 ms
+[IO] Elapsed time: 9.856 ms
 Image dimensions WxH are 2048 x 1024
-[Compute] Elapsed time: 1577.860 ms
+[Compute] Elapsed time: 1586.531 ms
 Solution iterations: 3963
 Solution is correct
 
@@ -59,9 +59,9 @@ Max threads: 8
 Computation started
 Image dimensions: WxH are 1024 x 768
 Computation finished
-[IO] Elapsed time: 8.141 ms
+[IO] Elapsed time: 7.629 ms
 Image dimensions WxH are 2048 x 1024
-[Compute] Elapsed time: 912.493 ms
+[Compute] Elapsed time: 933.541 ms
 Solution iterations: 3963
 Solution is correct
 
@@ -69,9 +69,9 @@ Max threads: 12
 Computation started
 Image dimensions: WxH are 1024 x 768
 Computation finished
-[IO] Elapsed time: 10.703 ms
+[IO] Elapsed time: 10.810 ms
 Image dimensions WxH are 2048 x 1024
-[Compute] Elapsed time: 924.124 ms
+[Compute] Elapsed time: 970.786 ms
 Solution iterations: 3963
 Solution is correct
 
@@ -79,9 +79,9 @@ Max threads: 16
 Computation started
 Image dimensions: WxH are 1024 x 768
 Computation finished
-[IO] Elapsed time: 11.868 ms
+[IO] Elapsed time: 13.461 ms
 Image dimensions WxH are 2048 x 1024
-[Compute] Elapsed time: 1129.802 ms
+[Compute] Elapsed time: 1107.321 ms
 Solution iterations: 3963
 Solution is correct
 
@@ -89,9 +89,9 @@ Max threads: 20
 Computation started
 Image dimensions: WxH are 1024 x 768
 Computation finished
-[IO] Elapsed time: 13.803 ms
+[IO] Elapsed time: 12.338 ms
 Image dimensions WxH are 2048 x 1024
-[Compute] Elapsed time: 1246.717 ms
+[Compute] Elapsed time: 1246.733 ms
 Solution iterations: 3963
 Solution is correct
 

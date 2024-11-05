@@ -1,62 +1,62 @@
-[IO] Elapsed time: 0.149 ms
+[IO] Elapsed time: 2.607 ms
 Image dimensions WxH are 50 x 32
-[Compute] Elapsed time: 15.462 ms
+[Compute] Elapsed time: 62.542 ms
 Solution iterations: 940
 Solution is correct
-[IO] Elapsed time: 2.405 ms
+[IO] Elapsed time: 6.504 ms
 Image dimensions WxH are 768 x 768
-[Compute] Elapsed time: 183.473 ms
+[Compute] Elapsed time: 245.372 ms
 Solution iterations: 3963
 Solution is correct
-[IO] Elapsed time: 2.960 ms
+[IO] Elapsed time: 3.768 ms
 Image dimensions WxH are 1000 x 750
-[Compute] Elapsed time: 197.237 ms
+[Compute] Elapsed time: 238.672 ms
 Solution iterations: 3963
 Solution is correct
-[IO] Elapsed time: 7.229 ms
+[IO] Elapsed time: 6.276 ms
 Image dimensions WxH are 2048 x 1024
-[Compute] Elapsed time: 376.420 ms
+[Compute] Elapsed time: 394.451 ms
 Solution iterations: 3963
 Solution is correct
 Max threads: 1
-[IO] Elapsed time: 4.238 ms
+[IO] Elapsed time: 7.131 ms
 Image dimensions WxH are 2048 x 1024
-[Compute] Elapsed time: 2733.796 ms
+[Compute] Elapsed time: 2624.995 ms
 Solution iterations: 3963
 Solution is correct
 Max threads: 2
-[IO] Elapsed time: 4.675 ms
+[IO] Elapsed time: 10.316 ms
 Image dimensions WxH are 2048 x 1024
-[Compute] Elapsed time: 1493.305 ms
+[Compute] Elapsed time: 1448.643 ms
 Solution iterations: 3963
 Solution is correct
 Max threads: 4
-[IO] Elapsed time: 4.805 ms
+[IO] Elapsed time: 9.867 ms
 Image dimensions WxH are 2048 x 1024
-[Compute] Elapsed time: 761.731 ms
+[Compute] Elapsed time: 742.658 ms
 Solution iterations: 3963
 Solution is correct
 Max threads: 8
-[IO] Elapsed time: 3.846 ms
+[IO] Elapsed time: 9.236 ms
 Image dimensions WxH are 2048 x 1024
-[Compute] Elapsed time: 415.877 ms
+[Compute] Elapsed time: 459.974 ms
 Solution iterations: 3963
 Solution is correct
 Max threads: 12
-[IO] Elapsed time: 4.381 ms
+[IO] Elapsed time: 14.150 ms
 Image dimensions WxH are 2048 x 1024
-[Compute] Elapsed time: 398.658 ms
+[Compute] Elapsed time: 426.851 ms
 Solution iterations: 3963
 Solution is correct
 Max threads: 16
-[IO] Elapsed time: 7.288 ms
+[IO] Elapsed time: 13.911 ms
 Image dimensions WxH are 2048 x 1024
-[Compute] Elapsed time: 378.213 ms
+[Compute] Elapsed time: 407.220 ms
 Solution iterations: 3963
 Solution is correct
 Max threads: 20
-[IO] Elapsed time: 4.027 ms
+[IO] Elapsed time: 11.184 ms
 Image dimensions WxH are 2048 x 1024
-[Compute] Elapsed time: 373.224 ms
+[Compute] Elapsed time: 427.020 ms
 Solution iterations: 3963
 Solution is correct

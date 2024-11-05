@@ -35,7 +35,6 @@ typedef float real_t;
 #define val(arry, i, j) arry[(i)*width + (j)]
 
 int iterations;
-// __device__ Npp8u d_run = 1;
 
 static void hot_plate(real_t *out, real_t *in, int width, int height, real_t epsilon) {
     htkCheck(cudaMemcpy(out, in, width * height * sizeof(real_t), cudaMemcpyDeviceToDevice));
@@ -48,16 +47,15 @@ static void hot_plate(real_t *out, real_t *in, int width, int height, real_t eps
     int stride;
     Npp8u *runBuffer = nppiMalloc_8u_C1(width-2, height-2, &stride);
 
-    size_t h_buffer_size;
     Npp32s lineStep = width * sizeof(real_t);
     NppiSize oSrcSize = { .width=width, .height=height };
     NppiPoint oSrcOffset = { .x=1, .y=1 };
     NppiSize RegionOfIntrest = { width - 2, height - 2 };
 
+    size_t h_buffer_size;
     nppCheck(nppiMinGetBufferHostSize_8u_C1R(RegionOfIntrest, &h_buffer_size));
     Npp8u *scratchBuffer;
     htkCheck(cudaMalloc((void **)&scratchBuffer, h_buffer_size));
-    if (!scratchBuffer) { printf("Failed to allocate scratchBuffer\n"); return; }
 
     const Npp32f pKernelHost[9] = { 0.0, 0.25, 0.0, 0.25, 0.0, 0.25, 0.0, 0.25, 0.0 };
     Npp32f *pKernelDevice;
@@ -70,9 +68,6 @@ static void hot_plate(real_t *out, real_t *in, int width, int height, real_t eps
 
 
     while (!h_run) {
-        // h_run = 1;
-        // htkCheck(cudaMemcpy(d_run, &h_run, sizeof(Npp8u), cudaMemcpyHostToDevice));
-        // Perform convolution with error checking
         nppCheck(nppiFilterBorder_32f_C1R(u_offset, lineStep, oSrcSize, oSrcOffset,
                                                    w_offset, lineStep, RegionOfIntrest,
                                                    pKernelDevice, kernelSize, oAnchor, NPP_BORDER_REPLICATE));
@@ -94,9 +89,11 @@ static void hot_plate(real_t *out, real_t *in, int width, int height, real_t eps
     }
 
     iterations = iter;
+    
     nppiFree(runBuffer);
     htkCheck(cudaFree(scratchBuffer));
     htkCheck(cudaFree(pKernelDevice));
+    htkCheck(cudaFree(d_run));
 }
 
 
