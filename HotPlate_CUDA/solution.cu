@@ -1,5 +1,4 @@
-#include "htk.h"
-
+#include "../libhtk/htk.h"
 
 #if defined(USE_DOUBLE)
 #define EPSILON 0.00005
@@ -24,20 +23,20 @@ __global__ static void hot_plate_kernel(real_t *out, real_t *in, int width, int 
   int Col = blockIdx.x * blockDim.x + threadIdx.x;
   int Row = blockIdx.y * blockDim.y + threadIdx.y;
   int r_run = 0;
-  if ((Row < height - 1) && (Col < width - 1) && (Row > 0) && (Col > 0)){
-    out[Row * width + Col] =
-    (in[(Row-1) * width + Col] + in[(Row+1)*width + Col] + in[(Row * width) + Col + 1] + in[(Row * width) + Col - 1]) / (real_t)4;
-  if (epsilon < FABS(out[Row * width + Col] - in[Row * width + Col])){
-    r_run |= 1;
-    
-    
+  if ((Row < height - 1) && (Col < width - 1) && (Row > 0) && (Col > 0))
+  {
+    out[Row * width + Col] = (in[(Row - 1) * width + Col] + in[(Row + 1) * width + Col] +
+                              in[(Row * width) + Col + 1] + in[(Row * width) + Col - 1]) /
+                             (real_t)4;
+    if (epsilon < FABS(out[Row * width + Col] - in[Row * width + Col]))
+    {
+      r_run |= 1;
+    }
+  }
+  r_run = __syncthreads_or(r_run);
+  if (threadIdx.x == 0 && threadIdx.y == 0)
+    atomicOr(&d_run, r_run);
 }
-}
-r_run = __syncthreads_or(r_run);
-if(threadIdx.x == 0 && threadIdx.y == 0)
-atomicOr(&d_run, r_run);
-}
-
 
 int main(int argc, char *argv[])
 {
@@ -78,7 +77,6 @@ int main(int argc, char *argv[])
   cudaMalloc((void **)&deviceInputData, size);
   cudaMalloc((void **)&deviceOutputData, size);
 
-
   output = htkImage_new(width, height, channels);
   hostInputData = htkImage_getData(input);
   hostOutputData = htkImage_getData(output);
@@ -89,34 +87,33 @@ int main(int argc, char *argv[])
   cudaMemcpy(deviceInputData, hostInputData, size, cudaMemcpyHostToDevice);
   cudaMemcpy(deviceOutputData, hostInputData, size, cudaMemcpyHostToDevice);
 
-
   dim3 DimGrid(ceil(width / (float)BLOCK_SIZE), ceil(height / (float)BLOCK_SIZE), 1);
   dim3 DimBlock(BLOCK_SIZE, BLOCK_SIZE, 1);
 
-  
   real_t *u = deviceInputData;
   real_t *w = deviceOutputData;
   int iterations = 0;
 
   htkTime_start(Compute, "Doing the computation");
-  while(h_run){
+  while (h_run)
+  {
     h_run = 0;
-    
+
     cudaMemcpyToSymbol(d_run, &h_run, sizeof(int));
-    hot_plate_kernel<<<DimGrid, DimBlock>>>(w, u, width, height,
-      EPSILON);
-      cudaDeviceSynchronize();
-      cudaMemcpyFromSymbol(&h_run, d_run, sizeof(int));
-      {
-        real_t* t = w;
-        w = u;
-        u = t;
-      }
-      iterations++;
+    hot_plate_kernel<<<DimGrid, DimBlock>>>(w, u, width, height, EPSILON);
+    cudaDeviceSynchronize();
+    cudaMemcpyFromSymbol(&h_run, d_run, sizeof(int));
+    {
+      real_t *t = w;
+      w = u;
+      u = t;
+    }
+    iterations++;
   }
   htkTime_stop(Compute, "Doing the computation");
   htkLog(TRACE, "Solution iterations: ", iterations);
-  if (u != deviceOutputData){
+  if (u != deviceOutputData)
+  {
     cudaMemcpy(deviceOutputData, u, size, cudaMemcpyDeviceToDevice);
   }
   cudaMemcpy(hostOutputData, deviceOutputData, size, cudaMemcpyDeviceToHost);
